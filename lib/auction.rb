@@ -14,4 +14,22 @@ class Auction
       item.name
     end
   end
+
+  def unpopular_items
+    @items.find_all do |item|
+      item.bids.empty?
+    end
+  end
+
+  def potential_revenue
+    items_with_bids.sum do |item|
+      item.current_high_bid
+    end
+  end
+
+  def items_with_bids
+    @items.find_all do |item|
+      item.bids != {}
+    end
+  end
 end
