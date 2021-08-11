@@ -41,20 +41,17 @@ class Auction
 
   def persons_with_bids
     @items.flat_map do |item|
-      item.bids.map do |person, bid|
-        person
-      end
+      item.bids.keys
     end.uniq
   end
 
   def bidder_info
-    persons_with_bids.map do |person|
-      items = @items.select do |item|
-        item.bids.has_key?(person)
-      end
-      info = { budget: person.budget, items: items}
+    @items.each_with_object({}) do |item, info|
+      item.bids.keys.each do |person|
+        info[person] ||= {budget: person.budget, items: []}
 
-      [person, info]
-    end.to_h
+        info[person][:items] << item
+      end
+    end
   end
 end
