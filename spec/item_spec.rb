@@ -54,4 +54,37 @@ RSpec.describe Item do
       expect(item1.bids).to eq({attendee1 => 50})
     end
   end
+
+  it 'can sell and item' do
+    item1 = Item.new('Chalkware Piggy Bank')
+    attendee1 = Attendee.new(name: 'Megan', budget: '$50')
+    attendee2 = Attendee.new(name: 'Bob', budget: '$75')
+    item1.add_bid(attendee2, 20)
+    item1.add_bid(attendee1, 22)
+
+    expect(item1.sell).to eq(attendee1)
+  end
+
+  it 'has bids by order' do
+    item1 = Item.new('Chalkware Piggy Bank')
+    attendee1 = Attendee.new(name: 'Megan', budget: '$50')
+    attendee2 = Attendee.new(name: 'Bob', budget: '$75')
+    item1.add_bid(attendee2, 20)
+    item1.add_bid(attendee1, 22)
+
+    expect(item1.bids_by_order).to eq({
+      attendee1 => 22,
+      attendee2 => 20
+    })
+  end
+
+  it 'can change who to sell to' do
+    item1 = Item.new('Chalkware Piggy Bank')
+    attendee3 = Attendee.new(name: 'Megan', budget: '$20')
+    attendee4 = Attendee.new(name: 'Bob', budget: '$75')
+    item1.add_bid(attendee3, 20)
+    item1.add_bid(attendee4, 22)
+
+    expect(item1.sell).to eq(attendee4)
+  end
 end

@@ -14,10 +14,25 @@ class Item
   def current_high_bid
     @bids.max_by do |person, bid|
       bid
-    end.last
+    end&.last
   end
 
   def close_bidding
     @open_bidding = false
+  end
+
+  def sell
+    bids_by_order.map do |person, bid|
+      if person.can_buy?(bid)
+        person.buy(bid)
+        return person
+      end
+    end
+  end
+
+  def bids_by_order
+    @bids.sort_by do |bid|
+      bid.last
+    end.reverse.to_h
   end
 end
