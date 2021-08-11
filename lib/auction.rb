@@ -32,4 +32,29 @@ class Auction
       item.bids != {}
     end
   end
+
+  def bidders
+    persons_with_bids.map do |person|
+      person.name
+    end
+  end
+
+  def persons_with_bids
+    @items.flat_map do |item|
+      item.bids.map do |person, bid|
+        person
+      end
+    end.uniq
+  end
+
+  def bidder_info
+    persons_with_bids.map do |person|
+      items = @items.select do |item|
+        item.bids.has_key?(person)
+      end
+      info = { budget: person.budget, items: items}
+
+      [person, info]
+    end.to_h
+  end
 end
