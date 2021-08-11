@@ -144,6 +144,10 @@ RSpec.describe Auction do
       expect(auction.date).to eq("24/02/2020")
     end
 
+    it 'has items by bids' do
+      expect(auction.items_by_bid).to eq([item4, item5, item1, item3, item2])
+    end
+
     it 'can close' do
       expected = {
         item1 => attendee2,
