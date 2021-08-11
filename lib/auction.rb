@@ -1,8 +1,9 @@
 class Auction
-  attr_reader :items
+  attr_reader :items, :date
 
-  def initialize
+  def initialize(date=Date.today)
     @items = []
+    @date = date.strftime('%d/%m/%Y')
   end
 
   def add_item(item)
@@ -53,5 +54,20 @@ class Auction
         info[person][:items] << item
       end
     end
+  end
+
+  def items_by_bid
+    @items.sort_by do |item|
+      item.current_high_bid || 0
+    end.reverse
+  end
+
+  def close_auction
+    items_by_bid.map do |item|
+      buyer = item.sell
+      buyer = 'Not Sold' if buyer == []
+
+      [item, buyer]
+    end.to_h
   end
 end
